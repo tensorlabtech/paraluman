@@ -1,22 +1,31 @@
+# Paraluman website
+
+## Homepage implementation
+
+- The static homepage lives in `src/components/paraluman-home`.
+- Brand-ready assets live in `public/assets`; raw client files remain in ignored `assets/source`.
+- The page uses the supplied vector logo exports, Mona Sans with restrained editorial accents, the eight-point star motif, paper texture, and approved cover artwork.
+- Section-specific GSAP choreography adds scroll rhythm while preserving a readable reduced-motion experience.
+
+## Documentation
+
+- Start with [`docs/README.md`](docs/README.md) for current project decisions.
+- Client source documents are indexed in [`original-docs/README.md`](original-docs/README.md) and remain unchanged.
+- Raw brand packages remain in `assets/source`; optimized runtime assets live in `public/assets`.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+Run the development server with the project package manager:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The homepage route is [`src/app/page.tsx`](src/app/page.tsx).
 
 ## Learn More
 

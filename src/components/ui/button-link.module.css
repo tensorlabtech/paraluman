@@ -1,0 +1,73 @@
+.button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 650;
+  gap: 16px;
+  justify-content: center;
+  min-height: var(--control-height);
+  padding: 0 20px;
+  transition:
+    color 240ms var(--ease-out-quart),
+    background-color 240ms var(--ease-out-quart),
+    border-color 240ms var(--ease-out-quart),
+    transform 120ms var(--ease-out-quart);
+}
+
+.light {
+  background: var(--color-ivory-bright);
+  color: var(--color-burgundy-deep);
+}
+
+.light:hover {
+  background: var(--color-raspberry);
+  color: var(--color-ivory-bright);
+  transform: translateY(-2px);
+}
+
+.dark {
+  background: var(--color-burgundy);
+  color: var(--color-ivory-bright);
+}
+
+.dark:hover {
+  background: var(--color-crimson);
+  transform: translateY(-2px);
+}
+
+.text {
+  border-color: color-mix(in oklch, currentColor 28%, transparent);
+  color: inherit;
+}
+
+.text:hover {
+  border-color: currentColor;
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(2px);
+}
+
+.arrow {
+  display: inline-block;
+  height: 18px;
+  transition: transform 240ms var(--ease-out-quart);
+  width: 18px;
+}
+
+.arrow svg {
+  display: block;
+  height: 100%;
+  stroke: currentColor;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 2.15;
+  width: 100%;
+}
+
+.button:hover .arrow {
+  transform: translate(2px, -2px);
+}
