@@ -15,6 +15,7 @@ export function Hero() {
           priority
           sizes="100vw"
           src="/assets/hero-cover-hq.webp"
+          unoptimized
         />
       </div>
       <div aria-hidden="true" className={styles.heroCurtain} data-hero-curtain>
@@ -40,7 +41,7 @@ export function Hero() {
         </div>
 
         <div className={styles.caseNoteShell} data-case-note-shell>
-          <aside className={styles.caseNote} data-case-note data-tilt-card>
+          <aside className={styles.caseNote} data-case-note>
             <div className={styles.caseNoteTop}>
               <p>Case framework · Demo</p>
               <span>01 / 03</span>

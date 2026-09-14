@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ReactNode } from "react";
 import { useRef } from "react";
+import { createHomeScrollStory } from "./home-scroll-story";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -62,50 +63,7 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             .from("[data-case-note]", { opacity: 0, scale: 0.92, x: 48, duration: 0.7 }, 0.82)
             .from("[data-case-note] i b", { scale: 0, stagger: 0.08, duration: 0.3 }, 1);
 
-          if (isDesktop) {
-            gsap
-              .timeline({
-                scrollTrigger: {
-                  trigger: "[data-hero]",
-                  start: "top top",
-                  end: "+=88%",
-                  pin: true,
-                  scrub: 0.7,
-                },
-              })
-              .to("[data-hero-image]", { scale: 1.075, xPercent: -1.2, ease: "none", duration: 0.78 }, 0.22)
-              .to("[data-hero-wash]", { opacity: 0.82, ease: "none", duration: 0.78 }, 0.22)
-              .fromTo(
-                "[data-hero-kicker]",
-                { opacity: 1, x: 0, y: 0 },
-                { opacity: 0, y: -10, ease: "none", duration: 0.2, immediateRender: false },
-                0.3,
-              )
-              .fromTo(
-                "[data-hero-description]",
-                { opacity: 1, x: 0, y: 0 },
-                { opacity: 0, y: -12, ease: "none", duration: 0.2, immediateRender: false },
-                0.34,
-              )
-              .fromTo(
-                "[data-hero-title]",
-                { opacity: 1, scale: 1, x: 0, y: 0 },
-                { opacity: 0, scale: 0.99, y: -18, ease: "none", duration: 0.28, immediateRender: false },
-                0.38,
-              )
-              .fromTo(
-                "[data-hero-cta]",
-                { opacity: 1, x: 0, y: 0 },
-                { opacity: 0, y: -8, ease: "none", duration: 0.18, immediateRender: false },
-                0.42,
-              )
-              .fromTo(
-                "[data-case-note-shell]",
-                { opacity: 1, scale: 1, x: 0, y: 0 },
-                { opacity: 0, scale: 0.98, x: -18, y: -16, ease: "none", duration: 0.3, immediateRender: false },
-                0.36,
-              );
-          }
+          createHomeScrollStory({ isDesktop, isMobile });
 
           const manifestoWords = gsap.utils.toArray<HTMLElement>("[data-manifesto-word]");
           gsap.set(manifestoWords, {
@@ -140,62 +98,6 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
               { opacity: 1, x: 0, duration: 0.3, ease: "none" },
               0.68,
             );
-
-          gsap.fromTo(
-            "[data-manifesto-art] img",
-            { scale: 1.02, yPercent: -3 },
-            {
-              ease: "none",
-              scale: 1.1,
-              scrollTrigger: {
-                trigger: "[data-manifesto]",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1.1,
-              },
-              yPercent: 3,
-            },
-          );
-
-          if (isDesktop) {
-            const serviceCards = gsap.utils.toArray<HTMLElement>("[data-service-card]");
-            gsap.set(serviceCards, { zIndex: (index) => index + 1 });
-            gsap.set(serviceCards.slice(1), { yPercent: 112, scale: 0.92 });
-
-            gsap
-              .timeline({
-                scrollTrigger: {
-                  trigger: "[data-services-story]",
-                  start: "top top",
-                  end: "+=260%",
-                  pin: "[data-services-stage]",
-                  scrub: 0.8,
-                },
-              })
-              .to("[data-services-progress]", { scaleX: 1, duration: 4, ease: "none" }, 0)
-              .to(serviceCards[0], { opacity: 1, duration: 0.7 }, 0)
-              .to(serviceCards[0], { yPercent: -7, scale: 0.9, opacity: 0.3, duration: 1, ease: "none" }, 1)
-              .to(serviceCards[1], { yPercent: 0, scale: 1, duration: 1, ease: "none" }, 1)
-              .to(serviceCards[1], { opacity: 1, duration: 0.7 }, 2)
-              .to(serviceCards[1], { yPercent: -7, scale: 0.9, opacity: 0.3, duration: 1, ease: "none" }, 3)
-              .to(serviceCards[2], { yPercent: 0, scale: 1, duration: 1, ease: "none" }, 3)
-              .to(serviceCards[2], { opacity: 1, duration: 0.7 }, 4);
-          } else if (isMobile) {
-            gsap.set("[data-service-card]", { opacity: 0, y: 48 });
-            gsap.fromTo(
-              "[data-service-card]",
-              { opacity: 0, y: 48 },
-              {
-                duration: 0.65,
-                ease: "power3.out",
-                immediateRender: false,
-                opacity: 1,
-                stagger: 0.1,
-                scrollTrigger: { trigger: "[data-service-cards]", start: "top 82%", once: true },
-                y: 0,
-              },
-            );
-          }
 
           gsap.utils.toArray<HTMLElement>("[data-reveal-section]").forEach((section) => {
             const heading = section.querySelector("[data-section-heading]");
@@ -250,26 +152,7 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             );
           });
 
-          if (isDesktop) {
-            const processTrack = document.querySelector<HTMLElement>("[data-process]");
-            const processStage = document.querySelector<HTMLElement>("[data-process-stage]");
-            if (processTrack && processStage) {
-              const travel = () => Math.max(0, processTrack.scrollWidth - processStage.clientWidth);
-              gsap
-                .timeline({
-                  scrollTrigger: {
-                    trigger: "[data-process-section]",
-                    start: "top top",
-                    end: () => `+=${travel() * 1.02}`,
-                    pin: "[data-process-stage]",
-                    scrub: 0.9,
-                    invalidateOnRefresh: true,
-                  },
-                })
-                .to(processTrack, { x: () => -travel(), duration: 1, ease: "none" }, 0)
-                .to("[data-process-progress]", { scaleX: 1, duration: 1, ease: "none" }, 0);
-            }
-          } else {
+          if (isMobile) {
             gsap.set("[data-process-step]", { opacity: 0, y: 40 });
             gsap.fromTo(
               "[data-process-step]",
@@ -286,14 +169,13 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             );
           }
 
-          const proofPath = document.querySelector<SVGPathElement>("[data-proof-path]");
-          if (proofPath) {
-            const length = proofPath.getTotalLength();
-            gsap.set(proofPath, { strokeDasharray: length, strokeDashoffset: length });
-            gsap.to(proofPath, {
-              strokeDashoffset: 0,
+          const proofAreaReveal = document.querySelector<SVGRectElement>("[data-proof-area-reveal]");
+          if (proofAreaReveal) {
+            gsap.set(proofAreaReveal, { scaleX: 0, transformOrigin: "left center" });
+            gsap.to(proofAreaReveal, {
+              scaleX: 1,
               ease: "none",
-              scrollTrigger: { trigger: "[data-proof]", start: "top 72%", end: "bottom 56%", scrub: 0.7 },
+              scrollTrigger: { trigger: "[data-proof]", start: "top 92%", end: "top 12%", scrub: 0.85 },
             });
           }
           gsap.set("[data-proof-title] span", {
@@ -419,50 +301,12 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             scrollTrigger: { trigger: "[data-footer]", start: "top bottom", end: "bottom bottom", scrub: 1 },
           });
 
-          const tiltCard = document.querySelector<HTMLElement>("[data-tilt-card]");
-          let removeTiltListeners = () => undefined;
-          if (tiltCard && isDesktop) {
-            gsap.set(tiltCard, { transformPerspective: 1100, transformOrigin: "center" });
-            const rotateX = gsap.quickTo(tiltCard, "rotationX", { duration: 0.26, ease: "power3.out" });
-            const rotateY = gsap.quickTo(tiltCard, "rotationY", { duration: 0.26, ease: "power3.out" });
-            const scaleX = gsap.quickTo(tiltCard, "scaleX", { duration: 0.28, ease: "power3.out" });
-            const scaleY = gsap.quickTo(tiltCard, "scaleY", { duration: 0.28, ease: "power3.out" });
-            const setScale = (value: number) => {
-              scaleX(value);
-              scaleY(value);
-            };
-            const onEnter = () => setScale(1.025);
-            const onMove = (event: PointerEvent) => {
-              const bounds = tiltCard.getBoundingClientRect();
-              const x = (event.clientX - bounds.left) / bounds.width;
-              const y = (event.clientY - bounds.top) / bounds.height;
-              tiltCard.style.setProperty("--tilt-x", `${x * 100}%`);
-              tiltCard.style.setProperty("--tilt-y", `${y * 100}%`);
-              rotateX((0.5 - y) * 13);
-              rotateY((x - 0.5) * 15);
-            };
-            const onLeave = () => {
-              rotateX(0);
-              rotateY(0);
-              setScale(1);
-            };
-            tiltCard.addEventListener("pointerenter", onEnter);
-            tiltCard.addEventListener("pointermove", onMove);
-            tiltCard.addEventListener("pointerleave", onLeave);
-            removeTiltListeners = () => {
-              tiltCard.removeEventListener("pointerenter", onEnter);
-              tiltCard.removeEventListener("pointermove", onMove);
-              tiltCard.removeEventListener("pointerleave", onLeave);
-            };
-          }
-
           const refresh = () => ScrollTrigger.refresh();
           window.addEventListener("load", refresh, { once: true });
           document.fonts.ready.then(refresh);
 
           return () => {
             headerTrigger.kill();
-            removeTiltListeners();
             window.removeEventListener("load", refresh);
           };
         },

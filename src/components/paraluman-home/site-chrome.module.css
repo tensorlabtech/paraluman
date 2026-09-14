@@ -117,9 +117,11 @@
 
 .heroImage {
   filter: saturate(0.9) contrast(1.09);
+  left: -7% !important;
+  max-width: none;
   object-fit: cover;
   object-position: center;
-  transform: scale(1.015);
+  width: 114% !important;
   will-change: transform;
 }
 
@@ -128,6 +130,7 @@
   inset: 0;
   overflow: hidden;
   position: absolute;
+  will-change: opacity;
 }
 
 .heroCurtain {

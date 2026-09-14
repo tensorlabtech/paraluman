@@ -14,11 +14,11 @@ export function ProcessTimeline() {
     <ol className={styles.process} data-process>
       {processSteps.map((step, index) => (
         <li data-process-step key={step} style={{ "--step-index": index } as CSSProperties}>
-          <div className={styles.processMedia}>
+          <div className={styles.processMedia} data-process-media>
             <Image alt="" fill sizes="(max-width: 900px) 100vw, 42vw" src={images[index % images.length]} />
             <span>0{index + 1}</span>
           </div>
-          <div className={styles.processCopy}>
+          <div className={styles.processCopy} data-process-copy>
             <small>Giai đoạn {index + 1}</small>
             <strong>{step}</strong>
             <p>{[

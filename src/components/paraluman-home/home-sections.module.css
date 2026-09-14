@@ -24,6 +24,7 @@
   inset: 0;
   opacity: 0.2;
   position: absolute;
+  will-change: clip-path, opacity;
 }
 
 .manifestoArt::after {
@@ -37,7 +38,10 @@
 
 .manifestoArt img {
   filter: saturate(0.7) contrast(1.08);
+  left: -6% !important;
+  max-width: none;
   object-fit: cover;
+  width: 112% !important;
   will-change: transform;
 }
 
@@ -206,7 +210,7 @@
   padding: clamp(28px, 4vw, 56px);
   position: absolute;
   transform-origin: center bottom;
-  will-change: transform, opacity;
+  will-change: clip-path, transform, opacity;
 }
 
 .serviceStoryImage {
@@ -611,6 +615,8 @@
 .processMedia img {
   filter: saturate(0.56) contrast(1.02);
   object-fit: cover;
+  transform-origin: center;
+  will-change: transform;
 }
 
 .processMedia span {
@@ -750,25 +756,15 @@
 }
 
 .proofSignal {
-  height: min(34vw, 420px);
-  opacity: 0.32;
+  height: 100%;
+  inset: 0;
+  opacity: 0.52;
   position: absolute;
-  right: -3vw;
-  top: 6%;
-  width: min(58vw, 900px);
+  width: 100%;
 }
 
 .proofSignal path {
-  fill: none;
-  stroke: var(--color-raspberry);
-  stroke-linecap: round;
-  stroke-width: 2;
-}
-
-.proofSignal .proofSignalGhost {
-  opacity: 0.28;
-  stroke: var(--color-ivory);
-  stroke-width: 1;
+  stroke: none;
 }
 
 .proofStatement {
@@ -1272,6 +1268,10 @@
 
   .proofInner {
     gap: 64px;
+  }
+
+  .proofSignal {
+    opacity: 0.32;
   }
 
   .subheading {

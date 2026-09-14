@@ -71,7 +71,7 @@ export function HomeSections() {
                   <span>Chapter {String(index + 1).padStart(2, "0")}</span>
                   <span>{index === 0 ? "Define" : index === 1 ? "Enable" : "Amplify"}</span>
                 </div>
-                <div className={styles.serviceStoryContent}>
+                <div className={styles.serviceStoryContent} data-service-content>
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
                 </div>
@@ -140,9 +140,27 @@ export function HomeSections() {
       </section>
 
       <section className={styles.proof} data-proof>
-        <svg aria-hidden="true" className={styles.proofSignal} data-proof-signal viewBox="0 0 720 260">
-          <path data-proof-path d="M6 226C114 224 132 168 222 173s101 34 170-29 101-82 166-49 80-44 156-80" />
-          <path className={styles.proofSignalGhost} d="M6 248h708" />
+        <svg
+          aria-hidden="true"
+          className={styles.proofSignal}
+          data-proof-signal
+          preserveAspectRatio="none"
+          viewBox="0 0 720 260"
+        >
+          <defs>
+            <linearGradient id="proof-area-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="60" y2="260">
+              <stop offset="0" stopColor="var(--color-raspberry)" stopOpacity="0.48" />
+              <stop offset="1" stopColor="var(--color-raspberry)" stopOpacity="0.04" />
+            </linearGradient>
+            <clipPath id="proof-area-clip">
+              <rect data-proof-area-reveal height="260" width="720" x="0" y="0" />
+            </clipPath>
+          </defs>
+          <path
+            clipPath="url(#proof-area-clip)"
+            d="M6 226C114 224 132 168 222 173s101 34 170-29 101-82 166-49 80-44 156-80L714 260H6Z"
+            fill="url(#proof-area-gradient)"
+          />
         </svg>
         <div className={`container ${styles.proofInner}`}>
           <div>

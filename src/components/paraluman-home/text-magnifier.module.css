@@ -81,6 +81,11 @@
   text-wrap: pretty;
 }
 
+.hero .highlight,
+.hero .lens {
+  display: none;
+}
+
 .statement {
   font-size: clamp(2.5rem, 5vw, 5.25rem);
   font-weight: 480;
