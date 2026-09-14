@@ -149,8 +149,8 @@ export function HomeSections() {
         >
           <defs>
             <linearGradient id="proof-area-gradient" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="60" y2="260">
-              <stop offset="0" stopColor="var(--color-raspberry)" stopOpacity="0.48" />
-              <stop offset="1" stopColor="var(--color-raspberry)" stopOpacity="0.04" />
+              <stop offset="0" stopColor="var(--color-burgundy)" stopOpacity="0.56" />
+              <stop offset="1" stopColor="var(--color-burgundy-deep)" stopOpacity="0.12" />
             </linearGradient>
             <clipPath id="proof-area-clip">
               <rect data-proof-area-reveal height="260" width="720" x="0" y="0" />
