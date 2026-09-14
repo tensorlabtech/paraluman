@@ -12,6 +12,7 @@ Nguồn yêu cầu đầy đủ là [Website Design Brief v2](../original-docs/2
 - Giữ các khối homepage do brief quy định; không thêm section mới chỉ để kéo dài trang.
 - Dùng mock có ghi chú rõ cho case study, số liệu, logo và nội dung chưa được PRLM duyệt.
 - Chưa triển khai backend, CMS, form lead hoặc đa ngôn ngữ trong bản giao diện hiện tại.
+- Motion dùng GSAP theo hướng editorial cinematic: tạo nhịp bằng crop ảnh, mask-cut, typography và chuyển tiếp giữa các chương. Không dùng WebGL, particle, hình tròn bay hoặc vật thể trang trí độc lập với nội dung.
 
 Homepage được sở hữu bởi [`src/components/paraluman-home/`](../src/components/paraluman-home/) và route [`src/app/page.tsx`](../src/app/page.tsx). Không chép lại cấu trúc component vào tài liệu này.
 
