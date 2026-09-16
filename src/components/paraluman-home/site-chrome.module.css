@@ -315,8 +315,8 @@
 .footerLead h2 {
   font-size: clamp(3rem, 7vw, 6rem);
   font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 0.98;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
   max-width: 11ch;
 }
 
@@ -362,11 +362,10 @@
 
 .script {
   color: var(--color-taupe);
-  font-family: var(--font-editorial);
+  font-family: var(--font-script);
   font-size: clamp(2rem, 3.8vw, 4rem);
-  font-style: italic;
   font-weight: 400;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   line-height: 1.08;
 }
 

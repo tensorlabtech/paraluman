@@ -102,12 +102,13 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
           gsap.utils.toArray<HTMLElement>("[data-reveal-section]").forEach((section) => {
             const heading = section.querySelector("[data-section-heading]");
             if (!heading) return;
-            gsap.set(heading.children, { clipPath: "inset(0 100% 0 0)", opacity: 0.2, x: -28 });
+            gsap.set(heading.children, { clipPath: "inset(-18% 100% -18% 0)", opacity: 0.2, x: -28 });
             gsap.fromTo(
               heading.children,
-              { clipPath: "inset(0 100% 0 0)", opacity: 0.2, x: -28 },
+              { clipPath: "inset(-18% 100% -18% 0)", opacity: 0.2, x: -28 },
               {
-                clipPath: "inset(0 0% 0 0)",
+                clearProps: "clipPath",
+                clipPath: "inset(-18% 0% -18% 0)",
                 duration: 0.78,
                 ease: "power3.out",
                 immediateRender: false,
@@ -179,15 +180,16 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             });
           }
           gsap.set("[data-proof-title] span", {
-            clipPath: "inset(0 0 100% 0)",
+            clipPath: "inset(0 -4% 100% -4%)",
             opacity: 0,
             yPercent: 32,
           });
           gsap.fromTo(
             "[data-proof-title] span",
-            { clipPath: "inset(0 0 100% 0)", opacity: 0, yPercent: 32 },
+            { clipPath: "inset(0 -4% 100% -4%)", opacity: 0, yPercent: 32 },
             {
-              clipPath: "inset(0 0 0% 0)",
+              clearProps: "clipPath",
+              clipPath: "inset(-18% -4% -18% -4%)",
               duration: 0.9,
               ease: "power3.out",
               immediateRender: false,
