@@ -4,7 +4,7 @@
 
 - The static homepage lives in `src/components/paraluman-home`.
 - Brand-ready assets live in `public/assets`; raw client files remain in ignored `assets/source`.
-- The page uses the supplied vector logo exports, Mona Sans with restrained editorial accents, the eight-point star motif, paper texture, and approved cover artwork.
+- The page uses the supplied vector logo exports, Mona Sans for primary typography, Adine Kirnberg for restrained script accents, the eight-point star motif, paper texture, and approved cover artwork.
 - Section-specific GSAP choreography adds scroll rhythm while preserving a readable reduced-motion experience.
 
 ## Documentation
