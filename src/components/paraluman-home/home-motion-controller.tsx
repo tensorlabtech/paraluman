@@ -81,54 +81,38 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
 
           const createLateRevealAnimations = () => {
             const manifestoWords = gsap.utils.toArray<HTMLElement>("[data-manifesto-word]");
-            const manifestoTrigger = {
-              trigger: "[data-manifesto]",
-              start: isDesktop ? "top 84%" : "top 86%",
-              end: isDesktop ? "bottom 112%" : "bottom 72%",
-            };
-            let activeWordIndex = -2;
-
-            const setManifestoReadingState = (progress: number) => {
-              const nextActiveIndex =
-                progress <= 0
-                  ? -1
-                  : Math.min(manifestoWords.length - 1, Math.floor(progress * manifestoWords.length));
-              if (nextActiveIndex === activeWordIndex) return;
-              activeWordIndex = nextActiveIndex;
-
-              manifestoWords.forEach((word, index) => {
-                const state = index < nextActiveIndex ? "past" : index === nextActiveIndex ? "active" : "upcoming";
-                word.dataset.readState = state;
-                gsap.set(word, {
-                  color: state === "active" ? "var(--color-raspberry)" : "var(--color-ivory-bright)",
-                  opacity: state === "active" ? 1 : state === "past" ? 0.34 : 0.08,
-                  scale: state === "active" ? 1.04 : 1,
-                  yPercent: state === "upcoming" ? 18 : 0,
-                });
-              });
-            };
-
-            setManifestoReadingState(0);
-            ScrollTrigger.create({
-              ...manifestoTrigger,
-              onUpdate: (self) => setManifestoReadingState(self.progress),
+            gsap.set(manifestoWords, {
+              color: "var(--color-ivory-bright)",
+              opacity: 0.34,
+              yPercent: 18,
             });
-            gsap.to("[data-manifesto-progress]", {
-              "--manifesto-progress": 1,
-              duration: 1,
-              ease: "none",
-              scrollTrigger: { ...manifestoTrigger, scrub: isDesktop ? 0.75 : 0.45 },
-            });
-            gsap.fromTo(
-              "[data-script-note]",
-              { opacity: 0.24, x: 40 },
-              {
-                opacity: 1,
-                x: 0,
-                ease: "none",
-                scrollTrigger: { ...manifestoTrigger, scrub: isDesktop ? 0.75 : 0.45 },
-              },
-            );
+            gsap
+              .timeline({
+                scrollTrigger: {
+                  trigger: "[data-manifesto]",
+                  start: isDesktop ? "top 84%" : "top 86%",
+                  end: isDesktop ? "bottom 92%" : "bottom 86%",
+                  scrub: isDesktop ? 0.75 : 0.45,
+                },
+              })
+              .to("[data-manifesto-progress]", { "--manifesto-progress": 1, duration: 1, ease: "none" }, 0)
+              .to(
+                manifestoWords,
+                {
+                  opacity: 1,
+                  stagger: 0.055,
+                  yPercent: 0,
+                  duration: 0.28,
+                  ease: "none",
+                },
+                0,
+              )
+              .fromTo(
+                "[data-script-note]",
+                { opacity: 0.24, x: 40 },
+                { opacity: 1, x: 0, duration: 0.3, ease: "none" },
+                0.68,
+              );
 
           gsap.utils.toArray<HTMLElement>("[data-reveal-section]").forEach((section) => {
             const heading = section.querySelector("[data-section-heading]");
