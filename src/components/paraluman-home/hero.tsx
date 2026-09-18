@@ -12,10 +12,10 @@ export function Hero() {
           className={styles.heroImage}
           data-hero-image
           fill
-          priority
+          preload
+          quality={90}
           sizes="100vw"
           src="/assets/hero-cover-hq.webp"
-          unoptimized
         />
       </div>
       <div aria-hidden="true" className={styles.heroCurtain} data-hero-curtain>

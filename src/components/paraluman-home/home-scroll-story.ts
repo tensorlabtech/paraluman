@@ -6,35 +6,68 @@ type StoryOptions = {
 };
 
 export function createHomeScrollStory({ isDesktop, isMobile }: StoryOptions) {
-  createHeroEditorialCut(isDesktop);
   createManifestoImageHandoff(isDesktop);
   createServicesChapterCuts({ isDesktop, isMobile });
   createProcessFocusTrack(isDesktop);
+  createPartnerMarquee();
 }
 
-function createHeroEditorialCut(isDesktop: boolean) {
+export function createHeroEditorialCut(isDesktop: boolean) {
   if (!isDesktop) return;
+
+  const heroWords = gsap.utils.toArray<HTMLElement>("[data-hero-word]");
 
   const timeline = gsap.timeline({
     defaults: { ease: "none" },
     scrollTrigger: {
       trigger: "[data-hero]",
       start: "top top",
-      end: "+=112%",
+      end: "+=145%",
       pin: true,
       scrub: 0.85,
       anticipatePin: 1,
     },
   });
 
-  timeline
+  return timeline
     .addLabel("establish", 0)
-    .to("[data-hero-image]", { xPercent: -5, duration: 1 }, "establish")
-    .to("[data-hero-media]", { autoAlpha: 0.72, duration: 1 }, "establish")
-    .addLabel("edit", 0.34)
-    .to("[data-hero-media]", { autoAlpha: 0.46, duration: 0.58 }, "edit")
-    .to("[data-hero-wash]", { opacity: 0.9, duration: 0.5 }, "edit")
-    .to("[data-hero-inner]", { autoAlpha: 0, yPercent: -2.5, duration: 0.38 }, "edit+=0.02");
+    .fromTo(
+      "[data-hero-image]",
+      { scale: 1.06 },
+      { duration: 1, ease: "none", scale: 1 },
+      "establish",
+    )
+    .to("[data-hero-wash]", { duration: 0.82, opacity: 0 }, "establish+=0.08")
+    .addLabel("exit", 0.3)
+    .to(
+      "[data-case-note]",
+      { duration: 0.2, opacity: 0, scale: 0.92, x: 48 },
+      "exit",
+    )
+    .to(
+      "[data-hero-cta], [data-hero-description]",
+      { duration: 0.2, opacity: 0, stagger: 0.04, y: 16 },
+      "exit+=0.02",
+    )
+    .to(
+      heroWords,
+      {
+        duration: 0.46,
+        opacity: 0,
+        rotateX: -76,
+        stagger: { each: 0.018, from: "end" },
+        yPercent: 115,
+      },
+      "exit+=0.12",
+    )
+    .to("[data-hero-title]", { autoAlpha: 0, duration: 0.08 }, ">-0.08")
+    .to(
+      "[data-hero-kicker] span",
+      { duration: 0.2, opacity: 0, y: 16 },
+      ">-0.06",
+    )
+    .addLabel("cleanFrame")
+    .to({}, { duration: 0.48 });
 }
 
 function createManifestoImageHandoff(isDesktop: boolean) {
@@ -79,16 +112,16 @@ function createServicesChapterCuts({ isDesktop, isMobile }: StoryOptions) {
 
   if (isDesktop) {
     gsap.set(cards, { zIndex: (index) => index + 1 });
-    gsap.set(cards.slice(1), { clipPath: "inset(100% 0% 0% 0%)", scale: 1.035 });
+    gsap.set(cards.slice(1), { clipPath: "inset(0% 0% 100% 0%)", scale: 1.035 });
 
     const timeline = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
         trigger: "[data-services-story]",
         start: "top top",
-        end: "+=255%",
-        pin: "[data-services-stage]",
-        scrub: 0.85,
+        end: "bottom bottom",
+        scrub: 0.55,
+        invalidateOnRefresh: true,
       },
     });
 
@@ -98,15 +131,23 @@ function createServicesChapterCuts({ isDesktop, isMobile }: StoryOptions) {
       const previousCard = cards[index];
       const cutAt = index * 2 + 1;
       timeline
-        .to(previousCard, { opacity: 0.45, scale: 0.96, xPercent: -2.5, duration: 1 }, cutAt)
+        .to(previousCard, { opacity: 0.82, scale: 0.985, xPercent: -1, duration: 1 }, cutAt)
+        .to(
+          previousCard.querySelector("[data-service-content]"),
+          { autoAlpha: 0, yPercent: -3, duration: 0.42 },
+          cutAt,
+        )
         .to(card, { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 1 }, cutAt)
         .fromTo(
           card.querySelector("[data-service-content]"),
-          { autoAlpha: 0.35, xPercent: 7 },
-          { autoAlpha: 1, xPercent: 0, duration: 0.7, immediateRender: false },
-          cutAt + 0.18,
+          { autoAlpha: 0, xPercent: 4 },
+          { autoAlpha: 1, xPercent: 0, duration: 0.28, immediateRender: false },
+          cutAt + 0.62,
         );
     });
+
+    // Hold the final chapter long enough to read before the pinned section releases.
+    timeline.to({}, { duration: 0.65 });
   } else if (isMobile) {
     gsap.fromTo(
       cards,
@@ -185,4 +226,23 @@ function createProcessFocusTrack(isDesktop: boolean) {
         0,
       );
   });
+}
+
+function createPartnerMarquee() {
+  gsap.fromTo(
+    "[data-partner-marquee]",
+    { xPercent: 0 },
+    {
+      xPercent: -24,
+      ease: "none",
+      immediateRender: false,
+      scrollTrigger: {
+        trigger: "[data-partners]",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.8,
+        invalidateOnRefresh: true,
+      },
+    },
+  );
 }

@@ -20,6 +20,13 @@
   transform-origin: 50% 100%;
 }
 
+.statement .word {
+  transition:
+    color 160ms var(--ease-out-quart),
+    opacity 160ms var(--ease-out-quart),
+    transform 160ms var(--ease-out-quart);
+}
+
 .highlight {
   clip-path: circle(0 at var(--lens-x) var(--lens-y));
   color: var(--color-raspberry);
@@ -36,7 +43,11 @@
 }
 
 .lens {
-  border: 1px solid color-mix(in oklch, var(--color-raspberry) 70%, transparent);
+  background: color-mix(in oklch, var(--color-burgundy) 5%, transparent);
+  border: 1px solid color-mix(in oklch, var(--color-raspberry) 88%, var(--color-ivory-bright));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--color-ivory-bright) 14%, transparent),
+    0 18px 48px color-mix(in oklch, var(--color-burgundy-deep) 34%, transparent);
   border-radius: 50%;
   height: 176px;
   left: var(--lens-x);
@@ -81,9 +92,22 @@
   text-wrap: pretty;
 }
 
-.hero .highlight,
+.hero .highlight {
+  color: var(--color-raspberry);
+  transform: scale(1.07);
+}
+
 .hero .lens {
-  display: none;
+  border-color: color-mix(in oklch, var(--color-ivory-bright) 68%, var(--color-raspberry));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--color-burgundy-deep) 20%, transparent),
+    0 18px 48px color-mix(in oklch, var(--color-burgundy-deep) 36%, transparent);
+  height: 160px;
+  width: 160px;
+}
+
+.hero.root[data-active="true"] .highlight {
+  clip-path: circle(80px at var(--lens-x) var(--lens-y));
 }
 
 .statement {
@@ -98,19 +122,15 @@
   color: var(--color-muted-dark);
 }
 
-@supports (animation-timeline: view()) {
-  .statement .base {
-    animation: statement-read both;
-    animation-range: entry 10% cover 58%;
-    animation-timeline: view();
-  }
+.statement .highlight {
+  color: var(--color-raspberry);
 }
 
 @media (hover: none) {
   .root[data-scan="true"] .highlight {
-    animation: lens-sweep 2.4s var(--ease-out-expo) both;
-    clip-path: circle(72px at -15% 50%);
-    transform: scale(1.02);
+    animation: lens-sweep 2.2s var(--ease-out-expo) 1.35s both;
+    clip-path: circle(104px at -15% 50%);
+    transform: scale(1);
   }
 
   .lens {
@@ -119,23 +139,12 @@
 
 }
 
-@keyframes statement-read {
-  from {
-    color: var(--color-muted-dark);
-    transform: scale(0.985);
-  }
-  to {
-    color: var(--color-ivory-bright);
-    transform: scale(1);
-  }
-}
-
 @keyframes lens-sweep {
   0% {
-    clip-path: circle(72px at -15% 50%);
+    clip-path: circle(104px at -15% 50%);
   }
   100% {
-    clip-path: circle(72px at 115% 50%);
+    clip-path: circle(104px at 115% 50%);
   }
 }
 

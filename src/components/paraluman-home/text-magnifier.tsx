@@ -6,6 +6,7 @@ import styles from "./text-magnifier.module.css";
 
 type TextMagnifierProps = {
   as?: "h1" | "p";
+  className?: string;
   children: string;
   variant: "hero" | "statement";
 };
@@ -15,9 +16,20 @@ type LensStyles = CSSProperties & {
   "--lens-y": string;
 };
 
-function AnimatedWords({ children, animate }: { children: string; animate: boolean }) {
+function AnimatedWords({
+  children,
+  target,
+}: {
+  children: string;
+  target?: "hero" | "manifesto";
+}) {
   return children.split(" ").map((word, index) => (
-    <span className={styles.word} data-hero-word={animate ? "" : undefined} key={`${word}-${index}`}>
+    <span
+      className={styles.word}
+      data-hero-word={target === "hero" ? "" : undefined}
+      data-manifesto-word={target === "manifesto" ? "" : undefined}
+      key={`${word}-${index}`}
+    >
       {word}
     </span>
   ));
@@ -25,6 +37,7 @@ function AnimatedWords({ children, animate }: { children: string; animate: boole
 
 export function TextMagnifier({
   as: Tag = "p",
+  className,
   children,
   variant,
 }: TextMagnifierProps) {
@@ -67,7 +80,7 @@ export function TextMagnifier({
 
   return (
     <div
-      className={`${styles.root} ${styles[variant]}`}
+      className={`${styles.root} ${styles[variant]} ${className ?? ""}`}
       data-magnifier-root
       data-active="false"
       data-scan="false"
@@ -77,10 +90,10 @@ export function TextMagnifier({
       style={initialStyle}
     >
       <Tag aria-label={children} className={styles.base}>
-        <AnimatedWords animate={variant === "hero"}>{children}</AnimatedWords>
+        <AnimatedWords target={variant === "hero" ? "hero" : "manifesto"}>{children}</AnimatedWords>
       </Tag>
       <div aria-hidden="true" className={styles.highlight}>
-        <AnimatedWords animate={false}>{children}</AnimatedWords>
+        <AnimatedWords>{children}</AnimatedWords>
       </div>
       <span aria-hidden="true" className={styles.lens} />
     </div>

@@ -104,13 +104,13 @@
 .manifestoCopy {
   color: var(--color-ivory-bright);
   font-size: clamp(2.6rem, 5vw, 5.6rem);
-  font-weight: 470;
+  font-weight: 520;
   letter-spacing: -0.02em;
   line-height: 1.04;
   max-width: 18ch;
 }
 
-.manifestoCopy span {
+.manifestoCopy [data-manifesto-word] {
   display: inline-block;
   margin-right: 0.22em;
   opacity: 1;
@@ -136,8 +136,8 @@
 
 .services {
   background: var(--color-ivory);
-  min-height: 100svh;
-  overflow: hidden;
+  min-height: 370svh;
+  overflow: clip;
   padding: 0;
   position: relative;
 }
@@ -171,7 +171,8 @@
   grid-template-columns: minmax(300px, 0.78fr) minmax(480px, 1.22fr);
   min-height: 100svh;
   padding-block: 80px;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1;
 }
 
@@ -213,15 +214,15 @@
 }
 
 .serviceStoryImage {
-  filter: saturate(0.64) contrast(1.04);
+  filter: saturate(0.78) contrast(1.05);
   object-fit: cover;
-  transform: scale(1.04);
+  transform: scale(1.015);
 }
 
 .serviceStoryOverlay {
   background:
-    linear-gradient(180deg, color-mix(in oklch, var(--color-charcoal) 52%, transparent), color-mix(in oklch, var(--color-burgundy-deep) 98%, transparent)),
-    linear-gradient(110deg, color-mix(in oklch, var(--color-burgundy) 88%, transparent), color-mix(in oklch, var(--color-charcoal) 36%, transparent));
+    linear-gradient(180deg, color-mix(in oklch, var(--color-charcoal) 38%, transparent), color-mix(in oklch, var(--color-burgundy-deep) 88%, transparent)),
+    linear-gradient(110deg, color-mix(in oklch, var(--color-burgundy) 68%, transparent), color-mix(in oklch, var(--color-charcoal) 26%, transparent));
   inset: 0;
   position: absolute;
 }
@@ -419,11 +420,11 @@
 }
 
 .verticalCard:nth-child(2) {
-  translate: 0 72px;
+  translate: 0;
 }
 
 .verticalCard:nth-child(3) {
-  translate: 0 28px;
+  translate: 0;
 }
 
 .verticalCard::after {
@@ -1148,6 +1149,8 @@
     grid-template-columns: 1fr;
     min-height: auto;
     padding-block: 0;
+    position: relative;
+    top: auto;
   }
 
   .serviceStoryCards {

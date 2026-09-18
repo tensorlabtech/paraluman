@@ -9,6 +9,7 @@ import {
   verticals,
 } from "./home-data";
 import { ProcessTimeline } from "./process-timeline";
+import { TextMagnifier } from "./text-magnifier";
 import styles from "./home-sections.module.css";
 
 const manifesto = "Không chỉ làm truyền thông mà quan tâm đến việc phần brand strategy sẽ liên quan tới chiến lược kinh doanh và vận hành như thế nào để ra được doanh thu ổn định.";
@@ -31,7 +32,7 @@ export function HomeSections() {
     <>
       <section className={styles.manifesto} data-manifesto id="ve-prlm">
         <div aria-hidden="true" className={styles.manifestoArt} data-manifesto-art>
-          <Image alt="" fill sizes="100vw" src="/assets/cover-1.webp" />
+          <Image alt="" fill quality={90} sizes="100vw" src="/assets/hero-cover-hq.webp" />
         </div>
         <div className={`container ${styles.manifestoStage}`} data-manifesto-stage>
           <div className={styles.manifestoRail} aria-hidden="true">
@@ -39,11 +40,9 @@ export function HomeSections() {
             <i data-manifesto-progress />
             <span>Tư duy</span>
           </div>
-          <p aria-label={manifesto} className={styles.manifestoCopy}>
-            {manifesto.split(" ").map((word, index) => (
-              <span aria-hidden="true" data-manifesto-word key={`${word}-${index}`}>{word}</span>
-            ))}
-          </p>
+          <TextMagnifier as="p" className={styles.manifestoCopy} variant="statement">
+            {manifesto}
+          </TextMagnifier>
           <p className={styles.scriptNote} data-script-note>Chẩn đoán sâu. Tư vấn có căn cứ.</p>
         </div>
       </section>
@@ -63,6 +62,7 @@ export function HomeSections() {
                   className={styles.serviceStoryImage}
                   fill
                   loading={index === 0 ? "eager" : "lazy"}
+                  quality={90}
                   sizes="(max-width: 900px) 100vw, 52vw"
                   src={verticals[index].image}
                 />
@@ -101,6 +101,7 @@ export function HomeSections() {
                     <Image
                       alt={`Hình ảnh concept cho ngành ${vertical.title}`}
                       fill
+                      quality={90}
                       sizes="(max-width: 760px) 100vw, 33vw"
                       src={vertical.image}
                     />
@@ -204,6 +205,7 @@ export function HomeSections() {
                       <Image
                         alt=""
                         fill
+                        quality={90}
                         sizes="(max-width: 760px) 100vw, 33vw"
                         src={project.image}
                       />

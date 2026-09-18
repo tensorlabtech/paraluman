@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ReactNode } from "react";
 import { useRef } from "react";
-import { createHomeScrollStory } from "./home-scroll-story";
+import { createHeroEditorialCut, createHomeScrollStory } from "./home-scroll-story";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -45,8 +45,24 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             return () => headerTrigger.kill();
           }
 
+          let deferredScrollTriggers: ScrollTrigger[] = [];
+          let heroScrollTimeline: gsap.core.Timeline | undefined;
+          if (isDesktop) gsap.set("[data-hero-image]", { scale: 1.06 });
+
           gsap
-            .timeline({ defaults: { ease: "power3.out" } })
+            .timeline({
+              defaults: { ease: "power3.out" },
+              onComplete: () => {
+                const existingTriggers = new Set(ScrollTrigger.getAll());
+                heroScrollTimeline = createHeroEditorialCut(isDesktop);
+                createHomeScrollStory({ isDesktop, isMobile });
+                createLateRevealAnimations();
+                deferredScrollTriggers = ScrollTrigger.getAll().filter(
+                  (trigger) => !existingTriggers.has(trigger),
+                );
+                ScrollTrigger.refresh();
+              },
+            })
             .to("[data-hero-curtain] span", {
               duration: 0.75,
               ease: "power4.inOut",
@@ -63,40 +79,55 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             .from("[data-case-note]", { opacity: 0, scale: 0.92, x: 48, duration: 0.7 }, 0.82)
             .from("[data-case-note] i b", { scale: 0, stagger: 0.08, duration: 0.3 }, 1);
 
-          createHomeScrollStory({ isDesktop, isMobile });
+          const createLateRevealAnimations = () => {
+            const manifestoWords = gsap.utils.toArray<HTMLElement>("[data-manifesto-word]");
+            const manifestoTrigger = {
+              trigger: "[data-manifesto]",
+              start: isDesktop ? "top 84%" : "top 86%",
+              end: isDesktop ? "bottom 112%" : "bottom 72%",
+            };
+            let activeWordIndex = -2;
 
-          const manifestoWords = gsap.utils.toArray<HTMLElement>("[data-manifesto-word]");
-          gsap.set(manifestoWords, {
-            color: "var(--color-ivory-bright)",
-            opacity: 0.34,
-            yPercent: 18,
-          });
-          gsap
-            .timeline({
-              scrollTrigger: {
-                trigger: "[data-manifesto]",
-                start: isDesktop ? "top 84%" : "top 86%",
-                end: isDesktop ? "bottom 54%" : "bottom 40%",
-                scrub: isDesktop ? 0.75 : 0.45,
-              },
-            })
-            .to("[data-manifesto-progress]", { "--manifesto-progress": 1, duration: 1, ease: "none" }, 0)
-            .to(
-              manifestoWords,
-              {
-                opacity: 1,
-                stagger: 0.055,
-                yPercent: 0,
-                duration: 0.28,
-                ease: "none",
-              },
-              0,
-            )
-            .fromTo(
+            const setManifestoReadingState = (progress: number) => {
+              const nextActiveIndex =
+                progress <= 0
+                  ? -1
+                  : Math.min(manifestoWords.length - 1, Math.floor(progress * manifestoWords.length));
+              if (nextActiveIndex === activeWordIndex) return;
+              activeWordIndex = nextActiveIndex;
+
+              manifestoWords.forEach((word, index) => {
+                const state = index < nextActiveIndex ? "past" : index === nextActiveIndex ? "active" : "upcoming";
+                word.dataset.readState = state;
+                gsap.set(word, {
+                  color: state === "active" ? "var(--color-raspberry)" : "var(--color-ivory-bright)",
+                  opacity: state === "active" ? 1 : state === "past" ? 0.34 : 0.08,
+                  scale: state === "active" ? 1.04 : 1,
+                  yPercent: state === "upcoming" ? 18 : 0,
+                });
+              });
+            };
+
+            setManifestoReadingState(0);
+            ScrollTrigger.create({
+              ...manifestoTrigger,
+              onUpdate: (self) => setManifestoReadingState(self.progress),
+            });
+            gsap.to("[data-manifesto-progress]", {
+              "--manifesto-progress": 1,
+              duration: 1,
+              ease: "none",
+              scrollTrigger: { ...manifestoTrigger, scrub: isDesktop ? 0.75 : 0.45 },
+            });
+            gsap.fromTo(
               "[data-script-note]",
               { opacity: 0.24, x: 40 },
-              { opacity: 1, x: 0, duration: 0.3, ease: "none" },
-              0.68,
+              {
+                opacity: 1,
+                x: 0,
+                ease: "none",
+                scrollTrigger: { ...manifestoTrigger, scrub: isDesktop ? 0.75 : 0.45 },
+              },
             );
 
           gsap.utils.toArray<HTMLElement>("[data-reveal-section]").forEach((section) => {
@@ -262,12 +293,6 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             },
           );
 
-          gsap.to("[data-partner-marquee]", {
-            xPercent: -24,
-            ease: "none",
-            scrollTrigger: { trigger: "[data-partners]", start: "top bottom", end: "bottom top", scrub: 0.8 },
-          });
-
           gsap.set("[data-footer-title] span", { opacity: 0, rotateX: -68, yPercent: 100 });
           gsap.fromTo(
             "[data-footer-title] span",
@@ -302,6 +327,7 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
             ease: "none",
             scrollTrigger: { trigger: "[data-footer]", start: "top bottom", end: "bottom bottom", scrub: 1 },
           });
+          };
 
           const refresh = () => ScrollTrigger.refresh();
           window.addEventListener("load", refresh, { once: true });
@@ -309,6 +335,12 @@ export function HomeMotionController({ children }: HomeMotionControllerProps) {
 
           return () => {
             headerTrigger.kill();
+            deferredScrollTriggers.forEach((trigger) => {
+              trigger.animation?.kill();
+              trigger.kill();
+            });
+            heroScrollTimeline?.scrollTrigger?.kill();
+            heroScrollTimeline?.kill();
             window.removeEventListener("load", refresh);
           };
         },
